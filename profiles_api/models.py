@@ -26,7 +26,7 @@ class UserProfileManager(BaseUserManager):
 
 	def create_superuser(self, email, name, password):
 		"""Create and save a new superuser with given details"""
-		user = self.create_user(email, name, password)
+		user = self.create_user_function(email, name, password)
 		# is_superuser is automatically create by PermissionsMixin in the UserProfile model bellow
 		user.is_superuser = True
 		user.is_staff = True
