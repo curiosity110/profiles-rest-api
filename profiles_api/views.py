@@ -7,13 +7,16 @@ from rest_framework.response import Response
 # When returning Responses from HTTP requests!!
 from rest_framework import status
 
+from rest_framework import viewsets
+
+from rest_framework.authentication import TokenAuthentication
+
 # and the serializer from Serializers.py
 from profiles_api import serializers
 # Defines our logic for endpoints
+from profiles_api import models
+from profiles_api import permissions
 
-
-
-from rest_framework import viewsets
 
 
 class Hello(APIView):
@@ -127,4 +130,29 @@ class HelloViewSets(viewsets.ViewSet):
 		def destroy(self, request, pk=None):
 			"""Handle removing an object"""
 			return Response({"http_method": "DELETE"})
+
+
+
+class UserProfileViewSet(viewsets.ModelViewSet):
+	"""Handle creating and updating profiles"""
+# 	Here we need to provide a query set to the ModelViewSet so it will wich object in the database are gonna be managed
+	serializer_class = serializers.UserProfileSerializer
+	queryset = models.UserProfile.objects.all()
+	"""The Django Rest Framework knows the standard function that you would want
+	to preform on a model viewset and that is the
+	create function to create new items
+	list function to list the models that are in the data base
+	the update, partial update and destroy to manage specific model objects in the data base
+	Django Does all of this for us just by
+	 assigning serializer class to a model serializer and the query set
+	 this is aswome about ModelViewSet"""
+
+	"""How is authenticated"""
+	authentication_classes = (TokenAuthentication,) #dont forget about the comma so this gets created as a tuple instead of a single item
+
+	"""What kind of permissions does he has"""
+	permission_classes = (permissions.UpdateOwnProfile,)
+
+
+
 
