@@ -2,6 +2,7 @@
 from rest_framework.views import APIView
 # Response Class...
 from rest_framework.response import Response
+from rest_framework import filters
 
 # Status input for serializers
 # When returning Responses from HTTP requests!!
@@ -152,6 +153,8 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 
 	"""What kind of permissions does he has"""
 	permission_classes = (permissions.UpdateOwnProfile,)
+	filter_backends = (filters.SearchFilter,) # filter searchFilter
+	search_fields = ('name', 'email',) # search field by...
 
 
 
